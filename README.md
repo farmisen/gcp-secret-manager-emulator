@@ -42,7 +42,7 @@ Most Secret Manager emulators skip authorization. This one can **enforce real IA
 | Approach | Example | When | Behavior |
 |----------|---------|------|----------|
 | Mock | Standard emulators | Never | Always allows |
-| Observer | iamlive (AWS) | After | Records what you used |
+| Observer | Post-execution analysis | After | Records what you used |
 | **Control Plane** | **Blackwell (this)** | **Before** | **Denies unauthorized** |
 
 Pre-flight enforcement catches permission bugs in development/CI, not production.
