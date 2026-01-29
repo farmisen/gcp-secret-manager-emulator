@@ -513,6 +513,25 @@ Maintained by **Dayna Blackwell** — founder of Blackwell Systems, building ref
 - [GCP KMS Emulator](https://github.com/blackwell-systems/gcp-kms-emulator) - IAM-enforced KMS data plane
 - [gcp-emulator-auth](https://github.com/blackwell-systems/gcp-emulator-auth) - Enforcement proxy library (the guard)
 
+---
+
+## Who's Using This?
+
+If you're using this Secret Manager emulator — in CI, locally, or in a test harness — I'd love to hear how you're using it.
+
+- **What secret management bugs did you catch?** (unauthorized access, missing version permissions, replication issues)
+- **Are you using IAM enforcement?** (integrated with gcp-iam-emulator, or running in permissive mode)
+- **Which API are you using?** (gRPC, REST, or both)
+- **What's still friction?** (missing methods, IAM integration complexity, performance issues)
+
+Open an issue, start a discussion, or reach out directly:
+
+📬 dayna@blackwell-systems.com
+
+This helps shape the roadmap and ensures the project stays aligned with real-world needs.
+
+---
+
 ## Trademarks
 
 **Blackwell Systems™** and the **Blackwell Systems logo** are trademarks of Dayna Blackwell. You may use the name "Blackwell Systems" to refer to this project, but you may not use the name or logo in a way that suggests endorsement or official affiliation without prior written permission. See [BRAND.md](BRAND.md) for usage guidelines.
