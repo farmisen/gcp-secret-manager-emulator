@@ -37,7 +37,7 @@ curl http://localhost:8080/v1/projects/test-project/secrets
 
 ## Why This Emulator Is Different
 
-Most Secret Manager emulators skip authorization. This one can **enforce real IAM policies** using the [IAM Emulator](https://github.com/blackwell-systems/gcp-iam-emulator) as a control plane.
+Most Secret Manager emulators skip authorization. This one can **enforce production-style IAM authorization policies** using the [IAM Emulator](https://github.com/blackwell-systems/gcp-iam-emulator) as a control plane.
 
 | Approach | Example | When | Behavior |
 |----------|---------|------|----------|
@@ -61,13 +61,15 @@ Google's official emulators have a critical flaw: they ignore authorization. You
 **Blackwell closes the hermetic seal:**
 
 With IAM enforcement enabled, your tests:
-- **Fail exactly like production** (same `PermissionDenied` errors)
+- **Fail for the same authorization reasons production would** (`PermissionDenied` errors)
 - **Run completely offline** (no network, no GCP credentials)
 - **Execute deterministically** (0ms IAM propagation delay vs 1-60s in real GCP)
 
 This is **true hermetic testing** - all dependencies sealed inside the boundary, no external leaks.
 
 ### Enforcement Modes
+
+**Scope note:** IAM enforcement in this emulator is scoped for CI authorization testing. It validates authorization intent and high-risk permissions, not full GCP IAM semantic parity.
 
 - **Off** (default) - No IAM checks, fast iteration
 - **Permissive** - Enforce when IAM available, allow on connectivity errors (fail-open)
@@ -120,7 +122,7 @@ gcp-emulator start
 
 ### IAM Enforcement (Optional)
 - **Pre-Flight Authorization** - Checks permissions before data access
-- **Real Policy Evaluation** - Uses IAM Emulator control plane for decisions
+- **Deterministic Policy Evaluation** - Uses IAM Emulator control plane for decisions
 - **Three Modes** - Off (default), Permissive (fail-open), Strict (fail-closed)
 - **Production Semantics** - Same permission names as real GCP (`secretmanager.secrets.get`)
 - **Fail Like Production** - Catch permission bugs in CI, not production
