@@ -15,6 +15,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
 )
 
 // Server represents the REST gateway server
@@ -285,8 +286,29 @@ func (s *Server) updateSecret(ctx context.Context, w http.ResponseWriter, r *htt
 
 	secret.Name = name
 
+	// Parse updateMask from query parameters.
+	// Handles both "updateMask=a,b" (REST convention) and
+	// "updateMask.paths=a&updateMask.paths=b" (structured query param convention).
+	var paths []string
+	if p := r.URL.Query()["updateMask.paths"]; len(p) > 0 {
+		paths = append(paths, p...)
+	}
+	if um := r.URL.Query().Get("updateMask"); um != "" {
+		for _, p := range strings.Split(um, ",") {
+			if trimmed := strings.TrimSpace(p); trimmed != "" {
+				paths = append(paths, trimmed)
+			}
+		}
+	}
+
+	var updateMask *fieldmaskpb.FieldMask
+	if len(paths) > 0 {
+		updateMask = &fieldmaskpb.FieldMask{Paths: paths}
+	}
+
 	req := &secretmanagerpb.UpdateSecretRequest{
-		Secret: &secret,
+		Secret:     &secret,
+		UpdateMask: updateMask,
 	}
 
 	resp, err := s.grpcClient.UpdateSecret(ctx, req)
